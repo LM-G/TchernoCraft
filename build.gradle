@@ -12,16 +12,16 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "1.0"
-group = "com.solofeed.tchernocraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.solofeed.tchernocraft"
 archivesBaseName = "tchernocraft"
 
-sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = "1.8"
 compileJava {
     sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "1.11.2-13.20.0.2285"
+    version = "1.11.2-13.20.0.2286"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -54,7 +54,9 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    //compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 }
 
 processResources {
