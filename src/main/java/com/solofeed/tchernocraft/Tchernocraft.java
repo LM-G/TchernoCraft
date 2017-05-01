@@ -23,7 +23,7 @@ public class Tchernocraft {
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = SERVER_PROXY_CLASS)
     public static IProxy proxy;
 
-    public static final TchernocraftTab creativeTab = new TchernocraftTab("tchernocraftTab");
+    public static final TchernocraftTab creativeTab = new TchernocraftTab("tchernocraft_tab");
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

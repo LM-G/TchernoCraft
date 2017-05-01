@@ -10,6 +10,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface DustItem {
+public @interface TchernocraftItem {
     String value() default StringUtils.EMPTY;
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Dust {}
 }

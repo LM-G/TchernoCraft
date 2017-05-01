@@ -1,1 +1,8 @@
+# Items
 item.redstonium_dust.name=Redstonium Dust
+
+# Blocks
+tile.redstonium_ore.name=Redstonium Ore
+
+# Misc
+itemGroup.tchernocraft_tab=Tchernocraft blocks

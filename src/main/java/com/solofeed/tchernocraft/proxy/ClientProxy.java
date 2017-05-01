@@ -1,5 +1,6 @@
 package com.solofeed.tchernocraft.proxy;
 
+import com.solofeed.tchernocraft.block.BlockHandler;
 import com.solofeed.tchernocraft.item.ItemHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -18,6 +19,7 @@ public class ClientProxy extends ServerProxy{
     public void init(FMLInitializationEvent event) {
         super.init(event);
         ItemHandler.registerRenders();
+        BlockHandler.registerRenders();
     }
 
     @Override
