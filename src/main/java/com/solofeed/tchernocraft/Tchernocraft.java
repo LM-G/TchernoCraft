@@ -2,11 +2,15 @@ package com.solofeed.tchernocraft;
 
 import com.solofeed.tchernocraft.creativetab.TchernocraftTab;
 import com.solofeed.tchernocraft.proxy.IProxy;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @Mod(modid = Tchernocraft.MOD_ID, version = Tchernocraft.VERSION, name = Tchernocraft.MOD_NAME)
@@ -23,7 +27,8 @@ public class Tchernocraft {
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = SERVER_PROXY_CLASS)
     public static IProxy proxy;
 
-    public static final TchernocraftTab creativeTab = new TchernocraftTab("tchernocraft_tab");
+    public static final TchernocraftTab creativeTab = new TchernocraftTab();
+    public static final List<CreativeTabs> creativeTabs = Arrays.asList(creativeTab);
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

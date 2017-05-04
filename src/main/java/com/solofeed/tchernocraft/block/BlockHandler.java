@@ -1,15 +1,17 @@
 package com.solofeed.tchernocraft.block;
 
+import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.util.ReflectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public final class BlockHandler {
      */
     private static final String BLOCKS_LOCATION = "com.solofeed.tchernocraft.block.blocks";
     private static final String INVENTORY = "inventory";
-    private static List<Block> oreBlocks;
+    private static List<Block> blocks;
 
     /**
      * private constructor
@@ -33,10 +35,34 @@ public final class BlockHandler {
     }
 
     /**
-     * Initialize all tchernocraft's blocks in forge registry
+     * Registers all blocks
      */
-    public static void init(){
-        registerOres();
+    public static void registerBlocks() {
+        final Class<TchernocraftBlock> tchernocraftBlockClass = TchernocraftBlock.class;
+        // we get all block classes
+        Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, tchernocraftBlockClass);
+        blocks = blockClasses.stream().map(c -> {
+            // and we instanciate them before registering them in forge registry
+            try {
+                Block block = Block.class.cast(c.newInstance());
+                TchernocraftBlock annotation = c.getAnnotation(tchernocraftBlockClass);
+                block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, annotation.name()));
+                block.setUnlocalizedName(block.getRegistryName().getResourcePath());
+                CreativeTabs tab = Tchernocraft.creativeTabs.stream()
+                        .filter(t -> StringUtils.equals(t.getTabLabel(), annotation.tab()))
+                        .findFirst().orElse(null);
+                if(tab == null){
+                    tab = Tchernocraft.creativeTab;
+                }
+                block.setCreativeTab(tab);
+                return block;
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error while instanciating blocks", e);
+            }
+        }).collect(Collectors.toList());
+
+        // register item in forge's registry
+        blocks.forEach(BlockHandler::register);
     }
 
     /**
@@ -50,30 +76,22 @@ public final class BlockHandler {
      * Gets all mod blocks
      * @return list of tchernocraft blocks
      */
-    private static List<Block> getBlocks(){
-        List<Block> blocks = new ArrayList<>();
-        blocks.addAll(oreBlocks);
-        return blocks;
+    public static Block getBlock(Class clazz){
+            return blocks.stream()
+                    .filter(b -> b.getClass().equals(clazz))
+                    .findFirst()
+                    .orElse(null);
     }
 
     /**
-     * Registers all dust blocks
+     * Gets all mod blocks
+     * @return list of tchernocraft blocks
      */
-    private static void registerOres() {
-        // we get all dust classes
-        Set<Class<?>> oreClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, TchernocraftBlock.Ore.class);
-        oreBlocks = oreClasses.stream().map(c -> {
-            // and we instanciate them before registering them in forge registry
-            try {
-                return Block.class.cast(c.newInstance());
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Error while instanciating ore blocks", e);
-            }
-        }).collect(Collectors.toList());
-
-        // register item in forge's registry
-        oreBlocks.forEach(BlockHandler::register);
+    public static List<Block> getBlocks(){
+        return blocks;
     }
+
+
 
     /**
      * Registers a block in the gfameregistry and generate its representing item

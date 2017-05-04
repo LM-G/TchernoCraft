@@ -14,8 +14,9 @@ import java.util.MissingResourceException;
  * Created by Louis-Marie on 01/05/2017.
  */
 public class TchernocraftTab extends CreativeTabs {
-    public TchernocraftTab(String label) {
-        super(label);
+    public static final String NAME = "tchernocraft_tab";
+    public TchernocraftTab() {
+        super(NAME);
     }
 
     @Override

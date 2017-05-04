@@ -1,14 +1,15 @@
 package com.solofeed.tchernocraft.item;
 
+import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.util.ReflectionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +23,8 @@ public final class ItemHandler {
      */
     private static final String ITEMS_LOCATION = "com.solofeed.tchernocraft.item.items";
     private static final String INVENTORY = "inventory";
-    private static List<Item> dustItems;
+
+    private static List<Item> items;
 
     /**
      * private constructor
@@ -32,14 +34,34 @@ public final class ItemHandler {
     }
 
     /**
-     * Initialize all tchernocraft's items in forge registry
+     * Registers all items
      */
-    public static void init(){
-        registerDusts();
-        registerWeapons();
-        registerTools();
-        registerPotions();
-        registerMiscellaneous();
+    public static void registerItems() {
+        final Class<TchernocraftItem> tchernocraftItemClass = TchernocraftItem.class;
+        // we get all item classes
+        Set<Class<?>> itemClasses = ReflectionUtils.getClasses(ITEMS_LOCATION, tchernocraftItemClass);
+        items = itemClasses.stream().map(c -> {
+            // and we instanciate them before registering them in forge registry
+            try {
+                Item item = Item.class.cast(c.newInstance());
+                TchernocraftItem annotation = c.getAnnotation(tchernocraftItemClass);
+                item.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, annotation.name()));
+                item.setUnlocalizedName(item.getRegistryName().getResourcePath());
+                CreativeTabs tab = Tchernocraft.creativeTabs.stream()
+                        .filter(t -> StringUtils.equals(t.getTabLabel(), annotation.tab()))
+                        .findFirst().orElse(null);
+                if(tab == null){
+                    tab = Tchernocraft.creativeTab;
+                }
+                item.setCreativeTab(tab);
+                return item;
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error while instanciating item", e);
+            }
+        }).collect(Collectors.toList());
+
+        // register item in forge's registry
+        items.forEach(GameRegistry::register);
     }
 
     /**
@@ -50,68 +72,25 @@ public final class ItemHandler {
     }
 
     public static Item getItem(String name){
-        Item item = getItems().stream()
-                .filter(i -> StringUtils.equals(i.getRegistryName().getResourcePath(), name))
+        return items.stream()
+                .filter(i -> i.getRegistryName() != null && StringUtils.equals(i.getRegistryName().getResourcePath(), name))
                 .findFirst()
                 .orElse(null);
-        return item;
+    }
+
+    public static Item getItem(Class clazz){
+        return items.stream()
+                .filter(i -> i.getClass().equals(clazz))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
      * Gets all mod items
      * @return list of tchernocraft items
      */
-    private static List<Item> getItems(){
-      List<Item> items = new ArrayList<>();
-      items.addAll(dustItems);
+    public static List<Item> getItems(){
       return items;
-    }
-
-    /**
-     * Registers all dust items
-     */
-    private static void registerDusts() {
-        // we get all dust classes
-        Set<Class<?>> dustClasses = ReflectionUtils.getClasses(ITEMS_LOCATION, TchernocraftItem.Dust.class);
-        dustItems = dustClasses.stream().map(c -> {
-            // and we instanciate them before registering them in forge registry
-            try {
-                return Item.class.cast(c.newInstance());
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Error while instanciating dust items", e);
-            }
-        }).collect(Collectors.toList());
-
-        // register item in forge's registry
-        dustItems.forEach(GameRegistry::register);
-    }
-
-    /**
-     * Registers all weapons items
-     */
-    private static void registerWeapons(){
-
-    }
-
-    /**
-     * Registers all tools items
-     */
-    private static void registerTools(){
-
-    }
-
-    /**
-     * Registers all potion items
-     */
-    private static void registerPotions(){
-
-    }
-
-    /**
-     * Registers all miscellaneous items
-     */
-    private static void registerMiscellaneous(){
-
     }
 
     /**
