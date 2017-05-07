@@ -22,7 +22,7 @@ public class Tchernocraft {
     public static final String SERVER_PROXY_CLASS = "com.solofeed.tchernocraft.proxy.ServerProxy";
 
     @Mod.Instance(MOD_ID)
-    public static Tchernocraft instance = new Tchernocraft();
+    public static Tchernocraft instance;
 
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = SERVER_PROXY_CLASS)
     public static IProxy proxy;

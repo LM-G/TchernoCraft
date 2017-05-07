@@ -1,13 +1,16 @@
 package com.solofeed.tchernocraft.block;
 
+import com.google.common.base.Preconditions;
 import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.util.ReflectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
@@ -94,41 +97,21 @@ public final class BlockHandler {
 
 
     /**
-     * Registers a block in the gfameregistry and generate its representing item
+     * Registers a block in the game registry and generate its representing item, if the block has custom properties,
+     * all of its models are registered too
      */
     private static void register(Block block){
         GameRegistry.register(block);
-        ItemBlock item = new ItemBlock(block);
+        ItemBlock item;
+
+        if(block instanceof BlockWithProperties){
+            item = new ItemMultiTexture(block, block, ((BlockWithProperties) block)::getVariantName);
+        } else {
+            item = new ItemBlock(block);
+        }
+
         item.setRegistryName(block.getRegistryName());
         GameRegistry.register(item);
-    }
-
-    /**
-     * Registers all weapons blocks
-     */
-    private static void registerWeapons(){
-
-    }
-
-    /**
-     * Registers all tools blocks
-     */
-    private static void registerTools(){
-
-    }
-
-    /**
-     * Registers all potion blocks
-     */
-    private static void registerPotions(){
-
-    }
-
-    /**
-     * Registers all miscellaneous blocks
-     */
-    private static void registerMiscellaneous(){
-
     }
 
     /**
@@ -136,12 +119,13 @@ public final class BlockHandler {
      * @param block item to register
      */
     private static void registerRender(Block block){
-        ResourceLocation resourceLocation = block.getRegistryName();
-        if(resourceLocation == null){
-            throw new IllegalArgumentException("A block  resource location is missing");
-        }
+        ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, INVENTORY);
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(Item.getItemFromBlock(block), 0, location);
+        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        if(block instanceof BlockWithProperties){
+
+        } else {
+            mesher.register(Item.getItemFromBlock(block), 0, location);
+        }
     }
 }

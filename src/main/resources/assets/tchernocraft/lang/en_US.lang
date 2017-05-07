@@ -1,12 +1,14 @@
 # Items
-item.redstonium_dust.name=Redstonium Dust
-item.redstonium_ingot.name=Redstonium Ingot
-item.redstonite_dust.name=Redstonite Dust
-item.redstonite_ingot.name=Redstonite Ingot
+item.redstonium_dust.name=Redstonium dust
+item.redstonium_ingot.name=Redstonium ingot
+item.redstonite_dust.name=Redstonite dust
+item.redstonite_ingot.name=Redstonite ingot
 
 # Blocks
-tile.redstonium_ore.name=Redstonium Ore
+tile.redstonium_ore.name=Redstonium ore
 tile.scaffholding.name=Scaffholding
+tile.test_block.a.name=Test block A
+tile.test_block.b.name=Test block B
 
 # Misc
 itemGroup.tchernocraft_tab=Tchernocraft
