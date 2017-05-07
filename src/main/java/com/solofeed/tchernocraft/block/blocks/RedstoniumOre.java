@@ -7,12 +7,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-@TchernocraftBlock(name = RedstoniumOre.NAME)
-public class RedstoniumOre extends Block {
+public class RedstoniumOre extends Block implements TchernocraftBlock {
     private final static Material material = Material.ROCK;
 
     public final static String NAME = "redstonium_ore";
 
+    @Override
+    public String getName(){
+    	return NAME;
+    }
+    
     public RedstoniumOre() {
         super(material);
         setHardness(25.0f);

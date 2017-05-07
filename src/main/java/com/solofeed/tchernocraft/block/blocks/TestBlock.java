@@ -29,8 +29,7 @@ import java.util.stream.Stream;
  * Created by Solofeed on 07/05/2017.
  * For testing purpose
  */
-@TchernocraftBlock(name = TestBlock.NAME)
-public class TestBlock extends Block implements IBlockWithProperties {
+public class TestBlock extends Block implements IBlockWithProperties, TchernocraftBlock {
     public final static String NAME = "test_block";
 
     private final static Material MATERIAL = Material.ROCK;
@@ -115,4 +114,9 @@ public class TestBlock extends Block implements IBlockWithProperties {
             return META_LOOKUP[meta];
         }
     }
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
 }

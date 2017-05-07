@@ -1,0 +1,4 @@
+# List of classes which implements the TchernocraftBlock interface
+com.solofeed.tchernocraft.block.blocks.RedstoniumOre
+com.solofeed.tchernocraft.block.blocks.Scaffolding
+com.solofeed.tchernocraft.block.blocks.TestBlock

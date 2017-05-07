@@ -1,33 +1,31 @@
 package com.solofeed.tchernocraft.block;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceLoader;
+
 import com.google.common.base.Preconditions;
 import com.solofeed.tchernocraft.Tchernocraft;
-import com.solofeed.tchernocraft.util.ReflectionUtils;
+import com.solofeed.tchernocraft.TchernocraftHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Tchernocraft's block handler
  */
-public final class BlockHandler {
+public final class BlockHandler extends TchernocraftHandler {
     /**
      * Relative location of block classes
      */
-    private static final String BLOCKS_LOCATION = "com.solofeed.tchernocraft.block.blocks";
     private static final String INVENTORY = "inventory";
-    private static List<Block> blocks;
+    private static List<Block> blocks = new ArrayList<>();
 
     /**
      * private constructor
@@ -40,29 +38,18 @@ public final class BlockHandler {
      * Registers all blocks
      */
     public static void registerBlocks() {
-        final Class<TchernocraftBlock> tchernocraftBlockClass = TchernocraftBlock.class;
-        // we get all block classes
-        Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, tchernocraftBlockClass);
-        blocks = blockClasses.stream().map(c -> {
-            // and we instanciate them before registering them in forge registry
+        ServiceLoader<TchernocraftBlock> blockClasses = ServiceLoader.load(TchernocraftBlock.class);
+        for (TchernocraftBlock tchernocraftBlock : blockClasses) {
             try {
-                Block block = Block.class.cast(c.newInstance());
-                TchernocraftBlock annotation = c.getAnnotation(tchernocraftBlockClass);
-                block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, annotation.name()));
+                Block block = Block.class.cast(tchernocraftBlock.getClass().newInstance());
+                block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, tchernocraftBlock.getName()));
                 block.setUnlocalizedName(block.getRegistryName().getResourcePath());
-                CreativeTabs tab = Tchernocraft.creativeTabs.stream()
-                        .filter(t -> StringUtils.equals(t.getTabLabel(), annotation.tab()))
-                        .findFirst().orElse(null);
-                // onglet par défaut
-                if(tab == null){
-                    tab = Tchernocraft.creativeTab;
-                }
-                block.setCreativeTab(tab);
-                return block;
+                block.setCreativeTab(getCreativeTabFromCurrentElement(tchernocraftBlock.getTab()));
+                blocks.add(block);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while instanciating blocks", e);
             }
-        }).collect(Collectors.toList());
+		}
 
         // register item in forge's registry
         blocks.forEach(BlockHandler::register);

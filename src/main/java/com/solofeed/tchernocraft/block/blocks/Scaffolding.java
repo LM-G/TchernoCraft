@@ -10,11 +10,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-@TchernocraftBlock(name = Scaffolding.NAME)
-public class Scaffolding extends Block{
+public class Scaffolding extends Block implements TchernocraftBlock{
     public final static String NAME = "scaffolding";
     private final static Material material = Material.IRON;
 
+    @Override
+    public String getName(){
+    	return NAME;
+    }
+    
     public Scaffolding() {
         super(material);
 
