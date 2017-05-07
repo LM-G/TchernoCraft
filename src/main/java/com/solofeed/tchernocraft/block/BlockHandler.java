@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +53,7 @@ public final class BlockHandler {
                 CreativeTabs tab = Tchernocraft.creativeTabs.stream()
                         .filter(t -> StringUtils.equals(t.getTabLabel(), annotation.tab()))
                         .findFirst().orElse(null);
+                // onglet par défaut
                 if(tab == null){
                     tab = Tchernocraft.creativeTab;
                 }
@@ -72,7 +72,11 @@ public final class BlockHandler {
      * Register all model and textures
      */
     public static void registerRenders(){
-        getBlocks().forEach(BlockHandler::registerRender);
+        try{
+            getBlocks().forEach(BlockHandler::registerRender);
+        } catch(Exception e){
+
+        }
     }
 
     /**
@@ -98,18 +102,11 @@ public final class BlockHandler {
 
     /**
      * Registers a block in the game registry and generate its representing item, if the block has custom properties,
-     * all of its models are registered too
+     * all of its models are registered too.
      */
     private static void register(Block block){
         GameRegistry.register(block);
-        ItemBlock item;
-
-        if(block instanceof IBlockWithProperties){
-            item = new ItemMultiTexture(block, block, ((IBlockWithProperties) block)::getVariantName);
-        } else {
-            item = new ItemBlock(block);
-        }
-
+        ItemBlock item = block instanceof IBlockWithProperties ? ((IBlockWithProperties) block).getItemBlock() : new ItemBlock(block);
         item.setRegistryName(block.getRegistryName());
         GameRegistry.register(item);
     }
@@ -118,14 +115,10 @@ public final class BlockHandler {
      * Tells Minecraft where to look to find models and textures
      * @param block item to register
      */
-    private static void registerRender(Block block){
+    private static void registerRender(Block block) {
         ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, INVENTORY);
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        if(block instanceof IBlockWithProperties){
-
-        } else {
-            mesher.register(Item.getItemFromBlock(block), 0, location);
-        }
+        mesher.register(Item.getItemFromBlock(block), 0, location);
     }
 }

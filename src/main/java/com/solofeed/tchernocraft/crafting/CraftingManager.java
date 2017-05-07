@@ -1,4 +1,4 @@
-package com.solofeed.tchernocraft.recipe;
+package com.solofeed.tchernocraft.crafting;
 
 import com.solofeed.tchernocraft.block.BlockHandler;
 import com.solofeed.tchernocraft.block.blocks.RedstoniumOre;
@@ -14,12 +14,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 /**
  * Created by Louis-Marie on 02/05/2017.
  */
-public final class RecipeHandler {
+public final class CraftingManager {
     /**
      * private constructor
      */
-    private RecipeHandler(){
-        throw new IllegalAccessError("RecipeHandler constructor must never be called");
+    private CraftingManager(){
+        throw new IllegalAccessError("CraftingManager constructor must never be called");
     }
 
     public static void registerRecipes(){
