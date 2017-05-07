@@ -1,6 +1,6 @@
 package com.solofeed.tchernocraft.block.blocks;
 
-import com.solofeed.tchernocraft.block.BlockWithProperties;
+import com.solofeed.tchernocraft.block.IBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * For testing purpose
  */
 @TchernocraftBlock(name = TestBlock.NAME)
-public class TestBlock extends Block implements BlockWithProperties {
+public class TestBlock extends Block implements IBlockWithProperties {
     public final static String NAME = "test_block";
 
     private final static Material MATERIAL = Material.ROCK;

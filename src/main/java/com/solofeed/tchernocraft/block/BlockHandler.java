@@ -104,8 +104,8 @@ public final class BlockHandler {
         GameRegistry.register(block);
         ItemBlock item;
 
-        if(block instanceof BlockWithProperties){
-            item = new ItemMultiTexture(block, block, ((BlockWithProperties) block)::getVariantName);
+        if(block instanceof IBlockWithProperties){
+            item = new ItemMultiTexture(block, block, ((IBlockWithProperties) block)::getVariantName);
         } else {
             item = new ItemBlock(block);
         }
@@ -122,7 +122,7 @@ public final class BlockHandler {
         ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, INVENTORY);
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        if(block instanceof BlockWithProperties){
+        if(block instanceof IBlockWithProperties){
 
         } else {
             mesher.register(Item.getItemFromBlock(block), 0, location);
