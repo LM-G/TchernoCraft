@@ -1,5 +1,6 @@
-package com.solofeed.tchernocraft;
+package com.solofeed.tchernocraft.util;
 
+import com.solofeed.tchernocraft.Tchernocraft;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,7 +16,7 @@ public class TchernocraftHandler {
 	 * @param creativeTabName
 	 * @return
 	 */
-	public static CreativeTabs getCreativeTabFromCurrentElement(String creativeTabName) {
+	public static CreativeTabs getCreativeTab(String creativeTabName) {
         CreativeTabs creativeTab = Tchernocraft.creativeTabs.stream()
                 .filter(t -> StringUtils.equals(t.getTabLabel(), creativeTabName))
                 .findFirst().orElse(null);

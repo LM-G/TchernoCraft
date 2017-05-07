@@ -3,12 +3,12 @@ package com.solofeed.tchernocraft.block;
 import com.solofeed.tchernocraft.creativetab.TchernocraftTab;
 
 /**
- * Interface for Block Element
+ * Interface for ModBlock Element
  */
-public interface TchernocraftBlock {
+public interface ITchernocraftBlock {
 
 	/**
-	 * Retrun the name of the Block
+	 * Retrun the name of the ModBlock
 	 * @return
 	 */
 	String getName();

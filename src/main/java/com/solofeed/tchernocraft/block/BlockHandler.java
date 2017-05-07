@@ -1,13 +1,8 @@
 package com.solofeed.tchernocraft.block;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ServiceLoader;
-
 import com.google.common.base.Preconditions;
 import com.solofeed.tchernocraft.Tchernocraft;
-import com.solofeed.tchernocraft.TchernocraftHandler;
-
+import com.solofeed.tchernocraft.util.TchernocraftHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -16,6 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * Tchernocraft's block handler
@@ -38,13 +37,13 @@ public final class BlockHandler extends TchernocraftHandler {
      * Registers all blocks
      */
     public static void registerBlocks() {
-        ServiceLoader<TchernocraftBlock> blockClasses = ServiceLoader.load(TchernocraftBlock.class);
-        for (TchernocraftBlock tchernocraftBlock : blockClasses) {
+        ServiceLoader<ITchernocraftBlock> blockClasses = ServiceLoader.load(ITchernocraftBlock.class);
+        for (ITchernocraftBlock tchernocraftBlock : blockClasses) {
             try {
                 Block block = Block.class.cast(tchernocraftBlock.getClass().newInstance());
                 block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, tchernocraftBlock.getName()));
                 block.setUnlocalizedName(block.getRegistryName().getResourcePath());
-                block.setCreativeTab(getCreativeTabFromCurrentElement(tchernocraftBlock.getTab()));
+                block.setCreativeTab(getCreativeTab(tchernocraftBlock.getTab()));
                 blocks.add(block);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while instanciating blocks", e);

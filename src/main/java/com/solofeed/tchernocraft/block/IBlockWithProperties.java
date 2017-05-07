@@ -4,7 +4,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 /**
- * Block with custom meta data
+ * ModBlock with custom meta data
  */
 public interface IBlockWithProperties {
     /**

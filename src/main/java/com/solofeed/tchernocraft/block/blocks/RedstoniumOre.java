@@ -1,13 +1,15 @@
 package com.solofeed.tchernocraft.block.blocks;
 
-import com.solofeed.tchernocraft.block.TchernocraftBlock;
+import com.solofeed.tchernocraft.block.ITchernocraftBlock;
+import com.solofeed.tchernocraft.block.ModBlock;
 import com.solofeed.tchernocraft.constant.HarvestLevel;
 import com.solofeed.tchernocraft.constant.Tool;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class RedstoniumOre extends Block implements TchernocraftBlock {
+@ModBlock
+public class RedstoniumOre extends Block implements ITchernocraftBlock {
     private final static Material material = Material.ROCK;
 
     public final static String NAME = "redstonium_ore";
