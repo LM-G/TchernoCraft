@@ -1,7 +1,7 @@
 package com.solofeed.tchernocraft.block.blocks;
 
+import com.google.auto.service.AutoService;
 import com.solofeed.tchernocraft.block.ITchernocraftBlock;
-import com.solofeed.tchernocraft.block.ModBlock;
 import com.solofeed.tchernocraft.constant.HarvestLevel;
 import com.solofeed.tchernocraft.constant.Tool;
 import net.minecraft.block.Block;
@@ -11,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-@ModBlock
+@AutoService(ITchernocraftBlock.class)
 public class Scaffolding extends Block implements ITchernocraftBlock {
     public final static String NAME = "scaffolding";
     private final static Material material = Material.IRON;

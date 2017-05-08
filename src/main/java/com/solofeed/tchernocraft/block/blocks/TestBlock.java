@@ -1,8 +1,8 @@
 package com.solofeed.tchernocraft.block.blocks;
 
+import com.google.auto.service.AutoService;
 import com.solofeed.tchernocraft.block.IBlockWithProperties;
 import com.solofeed.tchernocraft.block.ITchernocraftBlock;
-import com.solofeed.tchernocraft.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * Created by Solofeed on 07/05/2017.
  * For testing purpose
  */
-@ModBlock
+@AutoService(ITchernocraftBlock.class)
 public class TestBlock extends Block implements IBlockWithProperties, ITchernocraftBlock {
     public final static String NAME = "test_block";
 
