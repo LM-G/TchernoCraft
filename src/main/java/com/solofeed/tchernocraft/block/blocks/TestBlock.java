@@ -56,6 +56,7 @@ public class TestBlock extends Block implements IBlockWithProperties {
         return state.getValue(TYPE).getMeta();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(TYPE, EnumType.values()[meta]);
