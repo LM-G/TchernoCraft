@@ -16,7 +16,7 @@ public class RedstoniumOre extends Block {
     public RedstoniumOre() {
         super(material);
         setHardness(25.0f);
-        setSoundType(SoundType.GROUND);
+        setSoundType(SoundType.STONE);
         setLightLevel(0.1f);
         setLightOpacity(2);
         setHarvestLevel(Tool.PICKAXE, HarvestLevel.DIAMOND);

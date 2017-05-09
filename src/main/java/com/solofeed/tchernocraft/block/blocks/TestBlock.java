@@ -37,7 +37,13 @@ public class TestBlock extends Block implements IBlockWithProperties {
 
     public TestBlock() {
         super(MATERIAL);
-        setSoundType(SoundType.GROUND);
+        setSoundType(SoundType.METAL);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumType.VARIANT_A));
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
     }
 
     @Override
@@ -48,6 +54,11 @@ public class TestBlock extends Block implements IBlockWithProperties {
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(TYPE).getMeta();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(TYPE, EnumType.values()[meta]);
     }
 
     @Override

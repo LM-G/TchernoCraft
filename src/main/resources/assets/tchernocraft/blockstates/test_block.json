@@ -4,7 +4,7 @@
     "type=a": {
       "model": "tchernocraft:test_block_a"
     },
-    "type=a": {
+    "type=b": {
       "model": "tchernocraft:test_block_b"
     }
   }

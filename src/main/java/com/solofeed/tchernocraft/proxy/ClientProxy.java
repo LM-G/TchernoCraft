@@ -13,13 +13,14 @@ public class ClientProxy extends ServerProxy{
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+        ItemHandler.registerRenders();
+        BlockHandler.registerRenders();
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-        ItemHandler.registerRenders();
-        BlockHandler.registerRenders();
+
     }
 
     @Override

@@ -2,11 +2,12 @@ package com.solofeed.tchernocraft.item;
 
 import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.util.ReflectionUtils;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,6 +104,7 @@ public final class ItemHandler {
             throw new IllegalArgumentException("A item resource location is missing");
         }
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, INVENTORY);
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, location);
+        ModelBakery.registerItemVariants(item, location);
+        ModelLoader.setCustomMeshDefinition(item, stack -> location);
     }
 }
