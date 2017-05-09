@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class Tchernocraft {
     public static final String VERSION = "1.0";
     public static final String CLIENT_PROXY_CLASS = "com.solofeed.tchernocraft.proxy.ClientProxy";
     public static final String SERVER_PROXY_CLASS = "com.solofeed.tchernocraft.proxy.ServerProxy";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     @Mod.Instance(MOD_ID)
     public static Tchernocraft instance;

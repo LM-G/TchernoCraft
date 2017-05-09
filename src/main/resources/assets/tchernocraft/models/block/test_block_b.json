@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "tchernocraft:blocks/test_block_b"
+  }
+}

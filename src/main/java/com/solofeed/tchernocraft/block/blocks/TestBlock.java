@@ -2,6 +2,7 @@ package com.solofeed.tchernocraft.block.blocks;
 
 import com.solofeed.tchernocraft.block.IBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
+import com.solofeed.tchernocraft.constant.IBlockType;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -15,15 +16,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Stream;
+import java.util.List;
 
 /**
  * Created by Solofeed on 07/05/2017.
@@ -34,7 +33,7 @@ public class TestBlock extends Block implements IBlockWithProperties {
     public final static String NAME = "test_block";
 
     private final static Material MATERIAL = Material.ROCK;
-    private final static IProperty<EnumType> STATE = PropertyEnum.create("state", EnumType.class);
+    private final static IProperty<EnumType> TYPE = PropertyEnum.create("type", EnumType.class);
 
     public TestBlock() {
         super(MATERIAL);
@@ -43,12 +42,12 @@ public class TestBlock extends Block implements IBlockWithProperties {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{ STATE });
+        return new BlockStateContainer(this, new IProperty[]{TYPE});
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(STATE).getMeta();
+        return state.getValue(TYPE).getMeta();
     }
 
     @Override
@@ -74,7 +73,16 @@ public class TestBlock extends Block implements IBlockWithProperties {
 
     @Override
     public String getVariantName(ItemStack stack) {
-        return EnumType.getByMeta(stack.getMetadata()).getName();
+        return TYPE.getAllowedValues().stream()
+                .filter(e -> e.getMeta() == stack.getMetadata())
+                .findFirst()
+                .orElseThrow(NullPointerException::new)
+                .getName();
+    }
+
+    @Override
+    public List<IProperty<EnumType>> getProperties() {
+        return Arrays.asList(TYPE);
     }
 
     @Override
@@ -82,13 +90,9 @@ public class TestBlock extends Block implements IBlockWithProperties {
         return new ItemStack(Item.getItemFromBlock(this), 1, getMetaFromState(world.getBlockState(pos)));
     }
 
-    public enum EnumType implements IStringSerializable{
+    public enum EnumType implements IBlockType {
         VARIANT_A(0, "a"),
         VARIANT_B(1, "b");
-
-        private static final EnumType[] META_LOOKUP = Stream.of(values())
-                .sorted(Comparator.comparing(EnumType::getMeta))
-                .toArray(EnumType[]::new);
 
         private final int meta;
         private final String name;
@@ -98,6 +102,7 @@ public class TestBlock extends Block implements IBlockWithProperties {
             this.name = name;
         }
 
+        @Override
         public int getMeta() {
             return meta;
         }
@@ -105,14 +110,6 @@ public class TestBlock extends Block implements IBlockWithProperties {
         @Override
         public String getName() {
             return name;
-        }
-
-        public static EnumType getByMeta(int meta) {
-            if (meta < 0 || meta >= META_LOOKUP.length) {
-                meta = 0;
-            }
-
-            return META_LOOKUP[meta];
         }
     }
 }

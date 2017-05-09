@@ -4,13 +4,13 @@ import com.google.common.base.Preconditions;
 import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.util.ReflectionUtils;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,6 +40,7 @@ public final class BlockHandler {
      * Registers all blocks
      */
     public static void registerBlocks() {
+        Tchernocraft.LOGGER.info("Registering blocks ...");
         final Class<TchernocraftBlock> tchernocraftBlockClass = TchernocraftBlock.class;
         // we get all block classes
         Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, tchernocraftBlockClass);
@@ -66,17 +67,33 @@ public final class BlockHandler {
 
         // register item in forge's registry
         blocks.forEach(BlockHandler::register);
+        Tchernocraft.LOGGER.info("All blocks registered");
     }
 
     /**
      * Register all model and textures
      */
     public static void registerRenders(){
-        try{
-            getBlocks().forEach(BlockHandler::registerRender);
-        } catch(Exception e){
-
+        Tchernocraft.LOGGER.info("Registering block renders ...");
+        for(Block block : blocks){
+            if(block instanceof IBlockWithProperties){
+                ((IBlockWithProperties) block).getProperties().stream()
+                        .flatMap(type -> type.getAllowedValues().stream())
+                        .forEach(variant -> registerRender(block, variant.getMeta(), variant.getName()));
+                /*
+                StateMapperBase b = new DefaultStateMapper();
+                BlockStateContainer bsc = block.getBlockState();
+                ImmutableList<IBlockState> values = bsc.getValidStates();
+                for(IBlockState state : values) {
+                    String str = b.getPropertyString(state.getProperties());
+                    registerRender(block, block.getMetaFromState(state), str);
+                }
+                 */
+            } else {
+                registerRender(block);
+            }
         }
+        Tchernocraft.LOGGER.info("All block renders registered");
     }
 
     /**
@@ -106,9 +123,12 @@ public final class BlockHandler {
      */
     private static void register(Block block){
         GameRegistry.register(block);
+        Tchernocraft.LOGGER.info("Registered block" + block.getUnlocalizedName());
+        // if block has properties we get his custom itemblock else we get a standard one
         ItemBlock item = block instanceof IBlockWithProperties ? ((IBlockWithProperties) block).getItemBlock() : new ItemBlock(block);
         item.setRegistryName(block.getRegistryName());
         GameRegistry.register(item);
+        Tchernocraft.LOGGER.info("Registered item mathcing block " + block.getUnlocalizedName());
     }
 
     /**
@@ -118,7 +138,28 @@ public final class BlockHandler {
     private static void registerRender(Block block) {
         ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, INVENTORY);
-        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        mesher.register(Item.getItemFromBlock(block), 0, location);
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, location);
+        Tchernocraft.LOGGER.info("Registered renbder for block " + block.getUnlocalizedName());
+    }
+
+    /**
+     *
+     * @param block item to register
+     */
+    /**
+     * Tells Minecraft where to look to find variant models theirs custom name and textures
+     * @param block item to register
+     * @param meta corresponding meta
+     * @param name variant name
+     */
+    private static void registerRender(Block block, int meta, String name) {
+        ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
+        ModelResourceLocation location = new ModelResourceLocation(resourceLocation, name);
+        Item item = Item.getItemFromBlock(block);
+        ModelLoader.setCustomModelResourceLocation(item, meta, location);
+        Tchernocraft.LOGGER.info("Registered render for block " + location.getResourcePath() + "#" + name);
+
+        ModelBakery.registerItemVariants(item, location);
+        Tchernocraft.LOGGER.info("Registered variant render for item " + location.getResourcePath() + "#" + name);
     }
 }

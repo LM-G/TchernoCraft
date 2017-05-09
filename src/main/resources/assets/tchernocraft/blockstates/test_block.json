@@ -1,18 +1,11 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "minecraft:cube_all"
-  },
   "variants": {
-    "state=true": {
-      "textures": {
-        "all": "tchernocraft:test_block_a"
-      }
+    "type=a": {
+      "model": "tchernocraft:test_block_a"
     },
-    "state=false": {
-      "textures": {
-        "all": "tchernocraft:test_block_b"
-      }
+    "type=a": {
+      "model": "tchernocraft:test_block_b"
     }
   }
 }
