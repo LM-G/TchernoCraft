@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
+ * TODO refactoring, abstraction etc
  * Created by Louis-Marie on 02/05/2017.
  */
 public final class CraftingManager {
@@ -35,12 +36,12 @@ public final class CraftingManager {
         GameRegistry.addSmelting(in, out, xp);
     }
 
-    private static ItemStack getItemStack(Class<?> clazz){
+    private static ItemStack getItemStack(Class<?> itemBlockClass){
         ItemStack result;
-        if(Item.class.isAssignableFrom(clazz)){
-            result = new ItemStack(ItemHandler.getItem(clazz));
+        if(Item.class.isAssignableFrom(itemBlockClass)){
+            result = new ItemStack(ItemHandler.getItem(itemBlockClass));
         } else {
-            result = new ItemStack(BlockHandler.getBlock(clazz));
+            result = new ItemStack(BlockHandler.getBlock(itemBlockClass));
         }
         return result;
     }

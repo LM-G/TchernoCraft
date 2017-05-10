@@ -4,7 +4,7 @@ import com.solofeed.tchernocraft.Tchernocraft;
 import net.minecraft.creativetab.CreativeTabs;
 
 /**
- * Tchernocraft's block
+ * Tchernocraft's block interface. All mod's block implements this interface.
  */
 public interface ITchernocraftBlock {
     /**

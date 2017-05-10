@@ -94,10 +94,10 @@ public final class BlockHandler {
     private static void initBlocks(){
         // retrives all block classes in blocks package
         Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, TchernocraftBlock.class);
-        BLOCKS = blockClasses.stream().map(c -> {
+        BLOCKS = blockClasses.stream().map(bClass -> {
             // and instanciates them
             try {
-                return initBlock((Class<Block>) c);
+                return initBlock((Class<Block>) bClass);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while instanciating blocks", e);
             }
@@ -108,13 +108,13 @@ public final class BlockHandler {
      * Instanciates a class block. Set the registry name, the unlocalized name and its creative tab.
      * All blocks must implements the {@link ITchernocraftBlock} interface
      *
-     * @param c block class to instanciate
+     * @param bClass block class to instanciate
      * @return {@link Block} block instanciated
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    private static Block initBlock(Class<? extends Block> c) throws IllegalAccessException, InstantiationException {
-        Block block = Block.class.cast(c.newInstance());
+    private static Block initBlock(Class<? extends Block> bClass) throws IllegalAccessException, InstantiationException {
+        Block block = Block.class.cast(bClass.newInstance());
         if(block instanceof ITchernocraftBlock){
             ITchernocraftBlock tBlock = (ITchernocraftBlock) block;
             block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, tBlock.getName()));
@@ -122,13 +122,15 @@ public final class BlockHandler {
             block.setCreativeTab(tBlock.getCreativeTabs());
             return block;
         } else {
-            throw new IllegalArgumentException("Tried to instanciate invalid class " + c.getCanonicalName() + " into block");
+            throw new IllegalArgumentException("Tried to instanciate invalid class " + bClass.getCanonicalName() + " into block");
         }
     }
 
     /**
      * Registers a block in the game registry and generate its representing item, if the block has custom properties,
      * all of its variant models are registered too.
+     *
+     * @param block block to register in registry
      */
     private static void register(Block block){
         // register the block
