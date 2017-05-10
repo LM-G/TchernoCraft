@@ -25,7 +25,10 @@ public final class ReflectionUtils {
      * @return all annotated mathching classes
      */
     public static Set<Class<?>> getClasses(final String ITEMS_LOCATION, final Class<? extends Annotation> CLAZZ) {
-        //FIXME: replace with Reflections lib when forge will update its old deprecated guava 17.0 lib dependency ...
+        /*
+         * FIXME: replace with Reflections lib when forge will update its old deprecated guava 17.0 lib dependency ...
+         * @see https://github.com/ronmamo/reflections
+         */
         Set<Class<?>> classes = new HashSet<>();
         final ClassLoader loader = ReflectionUtils.class.getClassLoader();
         try {

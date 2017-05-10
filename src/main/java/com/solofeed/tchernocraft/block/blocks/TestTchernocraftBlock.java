@@ -1,6 +1,6 @@
 package com.solofeed.tchernocraft.block.blocks;
 
-import com.solofeed.tchernocraft.block.IBlockWithProperties;
+import com.solofeed.tchernocraft.block.ITchernocraftBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
 import com.solofeed.tchernocraft.constant.IBlockType;
 import net.minecraft.block.Block;
@@ -28,17 +28,22 @@ import java.util.List;
  * Created by Solofeed on 07/05/2017.
  * For testing purpose
  */
-@TchernocraftBlock(name = TestBlock.NAME)
-public class TestBlock extends Block implements IBlockWithProperties {
+@TchernocraftBlock
+public class TestTchernocraftBlock extends Block implements ITchernocraftBlockWithProperties {
     public final static String NAME = "test_block";
 
     private final static Material MATERIAL = Material.ROCK;
     private final static IProperty<EnumType> TYPE = PropertyEnum.create("type", EnumType.class);
 
-    public TestBlock() {
+    public TestTchernocraftBlock() {
         super(MATERIAL);
         setSoundType(SoundType.METAL);
         this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumType.VARIANT_A));
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
     }
 
     @Override
@@ -90,11 +95,6 @@ public class TestBlock extends Block implements IBlockWithProperties {
                 .findFirst()
                 .orElseThrow(NullPointerException::new)
                 .getName();
-    }
-
-    @Override
-    public List<IProperty<EnumType>> getProperties() {
-        return Arrays.asList(TYPE);
     }
 
     @Override

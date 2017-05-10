@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 /**
- * Block with custom meta data
+ * Tchernocraft Block with custom properties
  */
-public interface IBlockWithProperties {
+public interface ITchernocraftBlockWithProperties extends ITchernocraftBlock{
     /**
      * Gets the corresponding item block
      * @return item block
@@ -23,11 +23,4 @@ public interface IBlockWithProperties {
      * @return variant name
      */
     String getVariantName(ItemStack stack);
-
-    /**
-     * Gets all properties defining all block metadata
-     * @param <T>
-     * @return
-     */
-    <T extends Enum<T> & IBlockType> List<IProperty<T>> getProperties();
 }

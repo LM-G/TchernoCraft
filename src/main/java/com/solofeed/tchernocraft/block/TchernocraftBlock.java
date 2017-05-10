@@ -10,7 +10,4 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TchernocraftBlock {
-    String name();
-    String tab() default TchernocraftTab.NAME;
-}
+public @interface TchernocraftBlock {}

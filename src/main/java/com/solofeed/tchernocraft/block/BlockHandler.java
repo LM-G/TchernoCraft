@@ -9,13 +9,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -29,8 +27,14 @@ public final class BlockHandler {
      * Relative location of block classes
      */
     private static final String BLOCKS_LOCATION = "com.solofeed.tchernocraft.block.blocks";
+    /**
+     * item variant extensions
+     */
     private static final String INVENTORY = "inventory";
-    private static List<Block> blocks;
+    /**
+     * All Tchernocraft blocks
+     */
+    public static List<Block> BLOCKS;
 
     /**
      * private constructor
@@ -44,23 +48,21 @@ public final class BlockHandler {
      */
     public static void registerBlocks() {
         Tchernocraft.LOGGER.info("Registering blocks ...");
-        // instanciates all blocks
+        // instanciates all BLOCKS
         initBlocks();
         // register item in forge's registry
-        blocks.forEach(BlockHandler::register);
-        Tchernocraft.LOGGER.info("All blocks registered");
+        BLOCKS.forEach(BlockHandler::register);
+        Tchernocraft.LOGGER.info("All blocks registered !");
     }
 
     /**
-     * Register all model and textures
+     * Register all blocks models and textures
      */
     public static void registerRenders(){
         Tchernocraft.LOGGER.info("Registering block renders ...");
-        for(Block block : blocks){
-            if(block instanceof IBlockWithProperties){
-                /*((IBlockWithProperties) block).getProperties().stream()
-                        .flatMap(type -> type.getAllowedValues().stream())
-                        .forEach(variant -> registerRender(block, variant.getMeta(), variant.getName()));*/
+        for(Block block : BLOCKS){
+            // handles blocks with custom properties
+            if(block instanceof ITchernocraftBlockWithProperties){
                 StateMapperBase mapper = new DefaultStateMapper();
                 ImmutableList<IBlockState> values = block.getBlockState().getValidStates();
                 for(IBlockState state : values) {
@@ -68,10 +70,11 @@ public final class BlockHandler {
                     registerRender(block, block.getMetaFromState(state), name);
                 }
             } else {
+                // handles "normal" blocks
                 registerRender(block);
             }
         }
-        Tchernocraft.LOGGER.info("All block renders registered");
+        Tchernocraft.LOGGER.info("All block renders registered !");
     }
 
     /**
@@ -79,60 +82,59 @@ public final class BlockHandler {
      * @return list of tchernocraft blocks
      */
     public static Block getBlock(Class clazz){
-            return blocks.stream()
+            return BLOCKS.stream()
                     .filter(b -> b.getClass().equals(clazz))
                     .findFirst()
                     .orElse(null);
     }
 
     /**
-     * Gets all mod blocks
-     * @return list of tchernocraft blocks
-     */
-    public static List<Block> getBlocks(){
-        return blocks;
-    }
-
-    /**
      * Instanciates all blocks
      */
     private static void initBlocks(){
-        final Class<TchernocraftBlock> tchernocraftBlockClass = TchernocraftBlock.class;
-        // we get all block classes
-        Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, tchernocraftBlockClass);
-        blocks = blockClasses.stream().map(c -> {
-            // and we instanciate them before registering them in forge registry
+        // retrives all block classes in blocks package
+        Set<Class<?>> blockClasses = ReflectionUtils.getClasses(BLOCKS_LOCATION, TchernocraftBlock.class);
+        BLOCKS = blockClasses.stream().map(c -> {
+            // and instanciates them
             try {
-                Block block = Block.class.cast(c.newInstance());
-                TchernocraftBlock annotation = c.getAnnotation(tchernocraftBlockClass);
-                block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, annotation.name()));
-                block.setUnlocalizedName(block.getRegistryName().getResourcePath());
-                CreativeTabs tab = Tchernocraft.creativeTabs.stream()
-                        .filter(t -> StringUtils.equals(t.getTabLabel(), annotation.tab()))
-                        .findFirst().orElse(null);
-                // onglet par défaut
-                if(tab == null){
-                    tab = Tchernocraft.creativeTab;
-                }
-                block.setCreativeTab(tab);
-                return block;
+                return initBlock((Class<Block>) c);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while instanciating blocks", e);
             }
         }).collect(Collectors.toList());
     }
 
-
+    /**
+     * Instanciates a class block. Set the registry name, the unlocalized name and its creative tab.
+     * All blocks must implements the {@link ITchernocraftBlock} interface
+     *
+     * @param c block class to instanciate
+     * @return {@link Block} block instanciated
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    private static Block initBlock(Class<? extends Block> c) throws IllegalAccessException, InstantiationException {
+        Block block = Block.class.cast(c.newInstance());
+        if(block instanceof ITchernocraftBlock){
+            ITchernocraftBlock tBlock = (ITchernocraftBlock) block;
+            block.setRegistryName(new ResourceLocation(Tchernocraft.MOD_ID, tBlock.getName()));
+            block.setUnlocalizedName(block.getRegistryName().getResourcePath());
+            block.setCreativeTab(tBlock.getCreativeTabs());
+            return block;
+        } else {
+            throw new IllegalArgumentException("Tried to instanciate invalid class " + c.getCanonicalName() + " into block");
+        }
+    }
 
     /**
      * Registers a block in the game registry and generate its representing item, if the block has custom properties,
-     * all of its models are registered too.
+     * all of its variant models are registered too.
      */
     private static void register(Block block){
         // register the block
         GameRegistry.register(block);
         // if block has properties we get his custom itemblock else we get a standard one
-        ItemBlock item = block instanceof IBlockWithProperties ? ((IBlockWithProperties) block).getItemBlock() : new ItemBlock(block);
+        ItemBlock item = block instanceof ITchernocraftBlockWithProperties ? ((ITchernocraftBlockWithProperties) block).getItemBlock() : new ItemBlock(block);
         //register the block's associated item
         GameRegistry.register(item.setRegistryName(block.getRegistryName()));
         Tchernocraft.LOGGER.info("Registered block " + block.getUnlocalizedName());
@@ -159,6 +161,6 @@ public final class BlockHandler {
         ResourceLocation resourceLocation = Preconditions.checkNotNull(block.getRegistryName(), "A block  resource location is missing");
         ModelResourceLocation location = new ModelResourceLocation(resourceLocation, name);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, location);
-        Tchernocraft.LOGGER.info("Registered render for block " + location.getResourcePath());
+        Tchernocraft.LOGGER.info("Registered render for block " + location.getResourcePath() + "#" + location.getVariant());
     }
 }
