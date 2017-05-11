@@ -40,7 +40,7 @@ public final class BlockHandler {
      * private constructor
      */
     private BlockHandler(){
-        throw new IllegalAccessError("BlockHandler constructor must never be called");
+        throw new UnsupportedOperationException("BlockHandler constructor must never be called");
     }
 
     /**
@@ -139,7 +139,7 @@ public final class BlockHandler {
         ItemBlock item = block instanceof ITchernocraftBlockWithProperties ? ((ITchernocraftBlockWithProperties) block).getItemBlock() : new ItemBlock(block);
         //register the block's associated item
         GameRegistry.register(item.setRegistryName(block.getRegistryName()));
-        Tchernocraft.LOGGER.info("Registered block " + block.getUnlocalizedName());
+        Tchernocraft.LOGGER.info("Registered block " + block.getRegistryName().getResourcePath());
     }
 
     /**

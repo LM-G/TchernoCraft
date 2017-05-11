@@ -5,7 +5,7 @@
     "up": "tchernocraft:blocks/test_block_b",
     "north": "tchernocraft:blocks/test_block_b_front",
     "south": "tchernocraft:blocks/test_block_b",
-    "east": "tchernocraft:blocks/test_block_b",
-    "west": "tchernocraft:blocks/test_block_b"
+    "west": "tchernocraft:blocks/test_block_b",
+    "east": "tchernocraft:blocks/test_block_b"
   }
 }

@@ -31,7 +31,7 @@ public final class ItemHandler {
      * private constructor
      */
     private ItemHandler(){
-        throw new IllegalAccessError("ItemHandler constructor must never be called");
+        throw new UnsupportedOperationException("ItemHandler constructor must never be called");
     }
 
     /**

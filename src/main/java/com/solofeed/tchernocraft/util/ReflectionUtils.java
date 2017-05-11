@@ -16,7 +16,7 @@ public final class ReflectionUtils {
      * private constructor
      */
     private ReflectionUtils(){
-        throw new IllegalAccessError("ReflectionUtils constructor must never be called");
+        throw new UnsupportedOperationException("ReflectionUtils constructor must never be called");
     }
 
     /**
