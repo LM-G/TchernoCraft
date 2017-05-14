@@ -13,6 +13,8 @@ import net.minecraftforge.items.ItemStackHandler;
  * Created by Solofeed on 14/05/2017.
  */
 public class TestBlockContainer extends TchernocraftAbstractContainer {
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 3;
     private static final Coord2D SELF_INVENTORY_COORDS = new Coord2D(61,18);
 
     private TestBlockTileEntity tileEntity;
@@ -20,9 +22,9 @@ public class TestBlockContainer extends TchernocraftAbstractContainer {
     public TestBlockContainer(IInventory playerInv, TestBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;
         itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        itemHandler = new ItemStackHandler(45);
+        itemHandler = new ItemStackHandler(ROWS * COLUMNS);
         // generate test block inventory slots
-        ContainerHelper.create(SELF_INVENTORY_COORDS, 3, 3, itemHandler).forEach(this::addSlotToContainer);
+        ContainerHelper.create(SELF_INVENTORY_COORDS, ROWS, COLUMNS, itemHandler).forEach(this::addSlotToContainer);
         // generates default player inventory slots
         generateDefaultSlots(playerInv);
     }
