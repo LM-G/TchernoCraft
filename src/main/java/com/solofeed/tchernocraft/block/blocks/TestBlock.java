@@ -3,7 +3,9 @@ package com.solofeed.tchernocraft.block.blocks;
 import com.solofeed.tchernocraft.block.ITchernocraftBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
 import com.solofeed.tchernocraft.constant.IBlockType;
+import com.solofeed.tchernocraft.tileentity.tileentities.TestBlockTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -14,16 +16,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +39,7 @@ import java.util.List;
  * For testing purpose
  */
 @TchernocraftBlock
-public class TestBlock extends Block implements ITchernocraftBlockWithProperties {
+public class TestBlock extends Block implements ITchernocraftBlockWithProperties, ITileEntityProvider {
     /** Block's registry name */
     public final static String NAME = "test_block";
     /** Block's material */
@@ -91,7 +98,7 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
 
     @Override
     public int damageDropped(IBlockState state) {
-        return (getMetaFromState(state) / EnumFacing.values().length);
+        return getMetaFromState(state);
     }
 
     @Override
@@ -127,6 +134,29 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
         int meta = getMetaFromState(world.getBlockState(pos)) / FACING.getAllowedValues().size();
         IBlockState pickState = INVENTORY_STATES.stream().filter(s -> s.getValue(TYPE).getMeta() == meta).findFirst().orElse(INVENTORY_STATES.get(0));
         return new ItemStack(Item.getItemFromBlock(this), 1, getMetaFromState(pickState));
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new TestBlockTileEntity();
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TestBlockTileEntity();
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TestBlockTileEntity tileEntity = (TestBlockTileEntity) worldIn.getTileEntity(pos);
+        IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        for(int i =0; i < itemHandler.getSlots() - 1; i++){
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     public enum EnumType implements IBlockType {

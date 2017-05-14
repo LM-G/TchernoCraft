@@ -23,18 +23,12 @@ import java.util.stream.Collectors;
  * Tchernocraft's block handler
  */
 public final class BlockHandler {
-    /**
-     * Relative location of block classes
-     */
+    /** Relative location of block classes */
     private static final String BLOCKS_LOCATION = "com.solofeed.tchernocraft.block.blocks";
-    /**
-     * item variant extensions
-     */
+    /** item variant extensions */
     private static final String INVENTORY = "inventory";
-    /**
-     * All Tchernocraft blocks
-     */
-    public static List<Block> BLOCKS;
+    /** All Tchernocraft blocks */
+    private static List<Block> BLOCKS;
 
     /**
      * private constructor
@@ -48,7 +42,7 @@ public final class BlockHandler {
      */
     public static void registerBlocks() {
         Tchernocraft.LOGGER.info("Registering blocks ...");
-        // instanciates all BLOCKS
+        // instanciates all TILE_ENTITIES
         initBlocks();
         // register item in forge's registry
         BLOCKS.forEach(BlockHandler::register);
@@ -97,7 +91,7 @@ public final class BlockHandler {
         BLOCKS = blockClasses.stream().map(bClass -> {
             // and instanciates them
             try {
-                return initBlock((Class<Block>) bClass);
+                return initBlock(bClass.asSubclass(Block.class));
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while instanciating blocks", e);
             }
@@ -110,8 +104,8 @@ public final class BlockHandler {
      *
      * @param bClass block class to instanciate
      * @return {@link Block} block instanciated
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws IllegalAccessException instanciation error
+     * @throws InstantiationException instanciation error
      */
     private static Block initBlock(Class<? extends Block> bClass) throws IllegalAccessException, InstantiationException {
         Block block = Block.class.cast(bClass.newInstance());
