@@ -18,7 +18,7 @@ public abstract class TchernocraftAbstractTileEntity extends TileEntity{
     protected Map<ITchernocraftTagEnum, Object> tags = new HashMap<>();
 
     /**
-     * Determines if the running instance is the client side or the server side
+     * Determines if the running INSTANCE is the client side or the server side
      * @return true if we are on server side, false else
      */
     protected boolean isWorldLocal(){

@@ -25,7 +25,7 @@ public class Tchernocraft {
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     @Mod.Instance(MOD_ID)
-    public static Tchernocraft instance;
+    public static Tchernocraft INSTANCE;
 
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = SERVER_PROXY_CLASS)
     public static IProxy proxy;

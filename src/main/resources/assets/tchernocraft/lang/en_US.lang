@@ -10,5 +10,8 @@ tile.scaffolding.name=Scaffolding
 tile.test_block.a.name=Test block (A)
 tile.test_block.b.name=Test block (B)
 
+# Containers
+container.test_block=Test Block
+
 # Misc
 itemGroup.tchernocraft_tab=Tchernocraft

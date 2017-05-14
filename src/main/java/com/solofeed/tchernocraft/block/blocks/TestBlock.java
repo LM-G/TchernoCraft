@@ -1,7 +1,9 @@
 package com.solofeed.tchernocraft.block.blocks;
 
+import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.block.ITchernocraftBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
+import com.solofeed.tchernocraft.client.gui.GuiHandler;
 import com.solofeed.tchernocraft.constant.IBlockType;
 import com.solofeed.tchernocraft.tileentity.tileentities.TestBlockTileEntity;
 import net.minecraft.block.Block;
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -157,6 +160,14 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
             InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
         }
         super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(!worldIn.isRemote){
+            playerIn.openGui(Tchernocraft.INSTANCE, GuiHandler.TEST_BLOCK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     public enum EnumType implements IBlockType {
