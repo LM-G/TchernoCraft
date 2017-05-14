@@ -25,6 +25,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Solofeed on 07/05/2017.
@@ -32,19 +33,25 @@ import java.util.Arrays;
  */
 @TchernocraftBlock
 public class TestBlock extends Block implements ITchernocraftBlockWithProperties {
+    /** Block's registry name */
     public final static String NAME = "test_block";
-
+    /** Block's material */
     private final static Material MATERIAL = Material.ROCK;
+    /** Block's type */
     private final static IProperty<EnumType> TYPE = PropertyEnum.create("type", EnumType.class);
+    /** Block's facing direction */
     private final static PropertyDirection FACING = PropertyDirection.create("facing");
-
+    /** Block's possible state displayed in inventory */
+    private static List<IBlockState> INVENTORY_STATES;
+    /** TestBlock's constructor */
     public TestBlock() {
         super(MATERIAL);
         setSoundType(SoundType.METAL);
-        IBlockState state = this.blockState.getBaseState()
-                .withProperty(TYPE, EnumType.VARIANT_A)
-                .withProperty(FACING, EnumFacing.NORTH);
-        this.setDefaultState(state);
+        // we set only north facing state for both types A and B as only states availble in inventory
+        IBlockState INVENTORY_STATE_A = blockState.getBaseState().withProperty(TYPE, EnumType.VARIANT_A).withProperty(FACING, EnumFacing.NORTH);
+        IBlockState INVENTORY_STATE_B = blockState.getBaseState().withProperty(TYPE, EnumType.VARIANT_B).withProperty(FACING, EnumFacing.NORTH);
+        INVENTORY_STATES = Arrays.asList(INVENTORY_STATE_A, INVENTORY_STATE_B);
+        setDefaultState(INVENTORY_STATE_A);
     }
 
     @Override
@@ -55,9 +62,10 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
     @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState()
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
-                .withProperty(TYPE, getStateFromMeta(meta * EnumFacing.values().length).getValue(TYPE));
+        // we determines the state in which the new block will be depending on the player orientation and the TYPE on the sub item block
+        EnumFacing blockFacing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
+        EnumType blockType = TYPE.getAllowedValues().stream().filter(type -> type.getMeta() == meta / FACING.getAllowedValues().size()).findFirst().orElse(EnumType.VARIANT_A);
+        return blockState.getBaseState().withProperty(FACING, blockFacing).withProperty(TYPE, blockType);
     }
 
     @Override
@@ -69,15 +77,16 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
     public int getMetaFromState(IBlockState state) {
         int typeMeta = state.getValue(TYPE).getMeta();
         int facingMeta = state.getValue(FACING).ordinal();
-        return typeMeta * EnumFacing.values().length + facingMeta; //Stores the type the EnumFacing in the meta
+        return typeMeta * EnumFacing.values().length + facingMeta;
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumType type = EnumType.values()[(meta / EnumFacing.values().length) % EnumType.values().length]; //Gets the type from the meta
-        EnumFacing facing = EnumFacing.values()[meta % EnumFacing.values().length]; //Gets the EnumFacing from the meta
-        return this.getDefaultState().withProperty(TYPE, type).withProperty(FACING, facing); //Returns the correct state
+        EnumType type = EnumType.values()[(meta / EnumFacing.values().length) % EnumType.values().length];
+        EnumFacing facing = EnumFacing.values()[meta % EnumFacing.values().length];
+        IBlockState state = this.getDefaultState().withProperty(TYPE, type).withProperty(FACING, facing);
+        return state;
     }
 
     @Override
@@ -87,8 +96,9 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-        Arrays.stream(EnumType.values())
-                .forEach(enumType -> list.add(new ItemStack(this, 1, enumType.getMeta())));
+        for(IBlockState inventoryState: INVENTORY_STATES){
+            list.add(new ItemStack(this, 1, getMetaFromState(inventoryState)));
+        }
     }
 
     @Override
@@ -103,16 +113,20 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
 
     @Override
     public String getVariantName(ItemStack stack) {
+        // variant name depends only on the block's type
+        int typeMeta = stack.getMetadata() / FACING.getAllowedValues().size();
         return TYPE.getAllowedValues().stream()
-                .filter(e -> e.getMeta() == stack.getMetadata())
+                .filter(e -> e.getMeta() == typeMeta)
                 .findFirst()
-                .orElseThrow(NullPointerException::new)
+                .orElse(EnumType.VARIANT_A)
                 .getName();
     }
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(Item.getItemFromBlock(this), 1, getMetaFromState(world.getBlockState(pos)));
+        int meta = getMetaFromState(world.getBlockState(pos)) / FACING.getAllowedValues().size();
+        IBlockState pickState = INVENTORY_STATES.stream().filter(s -> s.getValue(TYPE).getMeta() == meta).findFirst().orElse(INVENTORY_STATES.get(0));
+        return new ItemStack(Item.getItemFromBlock(this), 1, getMetaFromState(pickState));
     }
 
     public enum EnumType implements IBlockType {
