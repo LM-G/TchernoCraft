@@ -22,6 +22,7 @@ public class TestBlockContainer extends TchernocraftAbstractContainer {
     public TestBlockContainer(IInventory playerInv, TestBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;
         itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
         itemHandler = new ItemStackHandler(ROWS * COLUMNS);
         // generate test block inventory slots
         ContainerHelper.create(SELF_INVENTORY_COORDS, ROWS, COLUMNS, itemHandler).forEach(this::addSlotToContainer);

@@ -1,4 +1,4 @@
-package com.solofeed.tchernocraft.client.gui;
+package com.solofeed.tchernocraft.client.gui.guis;
 
 import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.container.containers.TestBlockContainer;
