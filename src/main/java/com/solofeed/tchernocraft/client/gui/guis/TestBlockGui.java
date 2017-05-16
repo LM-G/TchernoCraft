@@ -13,16 +13,13 @@ import net.minecraft.util.ResourceLocation;
  */
 public class TestBlockGui extends GuiContainer {
     public static final String TEXTURE_LOCATION = "textures/gui/container/test_block.png";
-    private TestBlockTileEntity tileEntity;
-    private IInventory playerInv;
+
     private static final int X_SIZE = 176;
     private static final int Y_SIZE = 166;
 
 
     public TestBlockGui(IInventory playerInv, TestBlockTileEntity tileEntity) {
         super(new TestBlockContainer(playerInv, tileEntity));
-        this.tileEntity = tileEntity;
-        this.playerInv = playerInv;
 
         xSize = X_SIZE;
         ySize = Y_SIZE;

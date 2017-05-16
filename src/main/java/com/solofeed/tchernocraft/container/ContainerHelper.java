@@ -19,26 +19,26 @@ public final class ContainerHelper {
         throw new UnsupportedOperationException("TileEntityHandler constructor must never be called");
     }
 
-    public static List<SlotItemHandler> create(Coord2D initPoint, int rows, int columns, IItemHandler handler){
+    public static List<SlotItemHandler> create(Coord2D initPoint, int rows, int columns, int offset,IItemHandler handler){
         List<SlotItemHandler> slots = new ArrayList<>();
         int xPos = initPoint.getX();
         int yPos = initPoint.getY();
         for(int y = 0; y < rows; y++){
             for(int x = 0; x < columns; x++){
-                SlotItemHandler slot = new SlotItemHandler(handler, x + y * columns, xPos + x * SLOT_OFFSET, yPos + y * SLOT_OFFSET);
+                SlotItemHandler slot = new SlotItemHandler(handler, x + y * columns + offset, xPos + x * SLOT_OFFSET, yPos + y * SLOT_OFFSET);
                 slots.add(slot);
             }
         }
         return slots;
     }
 
-    public static List<Slot> create(Coord2D initPoint, int rows, int columns, IInventory inventory){
+    public static List<Slot> create(Coord2D initPoint, int rows, int columns, int offset,IInventory inventory){
         List<Slot> slots = new ArrayList<>();
         int xPos = initPoint.getX();
         int yPos = initPoint.getY();
         for(int y = 0; y < rows; y++){
             for(int x = 0; x < columns; x++){
-                Slot slot = new Slot(inventory, x + y * columns, xPos + x * SLOT_OFFSET, yPos + y * SLOT_OFFSET);
+                Slot slot = new Slot(inventory, x + y * columns + offset, xPos + x * SLOT_OFFSET, yPos + y * SLOT_OFFSET);
                 slots.add(slot);
             }
         }

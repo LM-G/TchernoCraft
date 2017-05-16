@@ -3,7 +3,7 @@ package com.solofeed.tchernocraft.block.blocks;
 import com.solofeed.tchernocraft.Tchernocraft;
 import com.solofeed.tchernocraft.block.ITchernocraftBlockWithProperties;
 import com.solofeed.tchernocraft.block.TchernocraftBlock;
-import com.solofeed.tchernocraft.client.gui.GuiHandler;
+import com.solofeed.tchernocraft.client.gui.TchernocraftGuis;
 import com.solofeed.tchernocraft.constant.IBlockType;
 import com.solofeed.tchernocraft.tileentity.tileentities.TestBlockTileEntity;
 import net.minecraft.block.Block;
@@ -165,9 +165,9 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote){
-            playerIn.openGui(Tchernocraft.INSTANCE, GuiHandler.TEST_BLOCK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(Tchernocraft.INSTANCE, TchernocraftGuis.TEST_BLOCK, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+        return true;
     }
 
     public enum EnumType implements IBlockType {

@@ -19,7 +19,7 @@ import java.util.Objects;
  * Created by Solofeed on 14/05/2017.
  */
 @TchernocraftTileEntity(id=TestBlock.NAME)
-public class TestBlockTileEntity extends TchernocraftAbstractTileEntity implements ITickable, ICapabilityProvider{
+public class TestBlockTileEntity extends TchernocraftAbstractTileEntity implements ITickable, ICapabilityProvider {
     public TestBlockTileEntity(){
         tags.put(EnumProperties.COOLDOWN, Integer.valueOf(0));
         tags.put(EnumProperties.ITEM_STACK_HANDLER, new ItemStackHandler());
