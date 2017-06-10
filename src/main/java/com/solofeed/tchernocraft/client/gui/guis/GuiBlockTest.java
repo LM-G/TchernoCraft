@@ -1,6 +1,7 @@
 package com.solofeed.tchernocraft.client.gui.guis;
 
 import com.solofeed.tchernocraft.Tchernocraft;
+import com.solofeed.tchernocraft.client.gui.TchernocraftGui;
 import com.solofeed.tchernocraft.container.containers.TestBlockContainer;
 import com.solofeed.tchernocraft.tileentity.tileentities.TestBlockTileEntity;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -9,16 +10,19 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Created by Solofeed on 14/05/2017.
+ * Test block's GUI
  */
-public class TestBlockGui extends GuiContainer {
-    public static final String TEXTURE_LOCATION = "textures/gui/container/test_block.png";
-
+@TchernocraftGui
+public class GuiBlockTest extends GuiContainer{
+    /** texture location */
+    private static final String TEXTURE_LOCATION = "textures/gui/container/test_block.png";
+    /** gui's height in pixel */
     private static final int X_SIZE = 176;
+    /** gui's width in pixel */
     private static final int Y_SIZE = 166;
 
 
-    public TestBlockGui(IInventory playerInv, TestBlockTileEntity tileEntity) {
+    public GuiBlockTest(IInventory playerInv, TestBlockTileEntity tileEntity) {
         super(new TestBlockContainer(playerInv, tileEntity));
 
         xSize = X_SIZE;

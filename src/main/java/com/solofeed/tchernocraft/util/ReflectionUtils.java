@@ -4,8 +4,7 @@ import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +26,7 @@ public final class ReflectionUtils {
     public static Set<Class<?>> getClasses(final String ITEMS_LOCATION, final Class<? extends Annotation> CLAZZ) {
         /*
          * FIXME: replace with Reflections lib when forge will update its old deprecated guava 17.0 lib dependency ...
-         * @see https://github.com/ronmamo/reflections
+         * @see https://github.com/ronmamo/reflections -> new Reflections("my.package").getTypesAnnotatedWith(MyAnnotation‌​.class)
          */
         Set<Class<?>> classes = new HashSet<>();
         final ClassLoader loader = ReflectionUtils.class.getClassLoader();

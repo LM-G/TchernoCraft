@@ -7,16 +7,23 @@ import com.solofeed.tchernocraft.constant.Tool;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * {@see http://greyminecraftcoder.blogspot.fr/2013/07/rendering-transparent-blocks.html}
+ */
 @TchernocraftBlock
-public class Scaffolding extends Block implements ITchernocraftBlock{
+public class BlockScaffolding extends Block implements ITchernocraftBlock{
     public final static String NAME = "scaffolding";
     private final static Material material = Material.IRON;
 
-    public Scaffolding() {
+    public BlockScaffolding() {
         super(material);
 
         setHardness(10.0f);
@@ -34,5 +41,30 @@ public class Scaffolding extends Block implements ITchernocraftBlock{
     @Override
     public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public BlockRenderLayer getBlockLayer(){
+        return BlockRenderLayer.CUTOUT ;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state){
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return true;
     }
 }

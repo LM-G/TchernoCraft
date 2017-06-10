@@ -11,14 +11,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
 @TchernocraftBlock
-public class RedstoniumOre extends Block implements ITchernocraftBlock{
+public class BlockRedstoniumOre extends Block implements ITchernocraftBlock{
     private final static Material material = Material.ROCK;
     /**
      * Block's name
      */
     public final static String NAME = "redstonium_ore";
 
-    public RedstoniumOre() {
+    public BlockRedstoniumOre() {
         super(material);
         // it's a really solid block
         setHardness(25.0f);

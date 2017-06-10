@@ -4,7 +4,7 @@ import com.solofeed.tchernocraft.item.TchernocraftItem;
 import net.minecraft.item.Item;
 
 /**
- * RedstoniumOre ingot item
+ * BlockRedstoniumOre ingot item
  */
 @TchernocraftItem(name = RedstoniumIngot.NAME)
 public class RedstoniumIngot extends Item{

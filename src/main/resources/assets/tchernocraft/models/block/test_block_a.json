@@ -1,6 +1,7 @@
 {
   "parent": "block/cube",
   "textures": {
+    "particle": "tchernocraft:blocks/test_block_a_front",
     "down": "tchernocraft:blocks/test_block_a",
     "up": "tchernocraft:blocks/test_block_a",
     "north": "tchernocraft:blocks/test_block_a_front",

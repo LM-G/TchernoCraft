@@ -1,7 +1,7 @@
 package com.solofeed.tchernocraft.tileentity.tileentities;
 
 import com.solofeed.tchernocraft.Tchernocraft;
-import com.solofeed.tchernocraft.block.blocks.TestBlock;
+import com.solofeed.tchernocraft.block.blocks.BlockTest;
 import com.solofeed.tchernocraft.tileentity.ITchernocraftTagEnum;
 import com.solofeed.tchernocraft.tileentity.TchernocraftAbstractTileEntity;
 import com.solofeed.tchernocraft.tileentity.TchernocraftTileEntity;
@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * Created by Solofeed on 14/05/2017.
  */
-@TchernocraftTileEntity(id=TestBlock.NAME)
+@TchernocraftTileEntity(id= BlockTest.NAME)
 public class TestBlockTileEntity extends TchernocraftAbstractTileEntity implements ITickable, ICapabilityProvider {
     public TestBlockTileEntity(){
         tags.put(EnumProperties.COOLDOWN, Integer.valueOf(0));

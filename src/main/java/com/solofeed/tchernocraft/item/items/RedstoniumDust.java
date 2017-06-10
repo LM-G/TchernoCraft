@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
 /**
- * RedstoniumOre dust item
+ * BlockRedstoniumOre dust item
  */
 @TchernocraftItem(name = RedstoniumDust.NAME)
 public class RedstoniumDust extends Item{

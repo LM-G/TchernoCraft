@@ -42,7 +42,7 @@ import java.util.List;
  * For testing purpose
  */
 @TchernocraftBlock
-public class TestBlock extends Block implements ITchernocraftBlockWithProperties, ITileEntityProvider {
+public class BlockTest extends Block implements ITchernocraftBlockWithProperties, ITileEntityProvider {
     /** Block's registry name */
     public final static String NAME = "test_block";
     /** Block's material */
@@ -53,8 +53,8 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
     private final static PropertyDirection FACING = PropertyDirection.create("facing");
     /** Block's possible state displayed in inventory */
     private static List<IBlockState> INVENTORY_STATES;
-    /** TestBlock's constructor */
-    public TestBlock() {
+    /** BlockTest's constructor */
+    public BlockTest() {
         super(MATERIAL);
         setSoundType(SoundType.METAL);
         // we set only north facing state for both types A and B as only states availble in inventory
@@ -165,7 +165,7 @@ public class TestBlock extends Block implements ITchernocraftBlockWithProperties
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote){
-            playerIn.openGui(Tchernocraft.INSTANCE, TchernocraftGuis.TEST_BLOCK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(Tchernocraft.INSTANCE, TchernocraftGuis.GUI_BLOCK_TEST, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

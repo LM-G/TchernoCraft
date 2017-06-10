@@ -1,7 +1,7 @@
 package com.solofeed.tchernocraft.crafting;
 
 import com.solofeed.tchernocraft.block.BlockHandler;
-import com.solofeed.tchernocraft.block.blocks.RedstoniumOre;
+import com.solofeed.tchernocraft.block.blocks.BlockRedstoniumOre;
 import com.solofeed.tchernocraft.item.ItemHandler;
 import com.solofeed.tchernocraft.item.items.RedstoniteDust;
 import com.solofeed.tchernocraft.item.items.RedstoniteIngot;
@@ -25,7 +25,7 @@ public final class CraftingManager {
 
     public static void registerRecipes(){
         addSmelting(RedstoniumDust.class, RedstoniumIngot.class, 1, 50.0f);
-        addSmelting(RedstoniumOre.class, RedstoniumIngot.class, 1, 25.0f);
+        addSmelting(BlockRedstoniumOre.class, RedstoniumIngot.class, 1, 25.0f);
         addSmelting(RedstoniteDust.class, RedstoniteIngot.class, 1, 100.0f);
     }
 
