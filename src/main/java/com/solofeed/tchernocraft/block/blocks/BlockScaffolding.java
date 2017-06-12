@@ -62,9 +62,16 @@ public class BlockScaffolding extends Block implements ITchernocraftBlock{
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return true;
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    {
+        // gets the neighboor blockstate following the given side
+        IBlockState sideBlockState = blockAccess.getBlockState(pos.offset(side));
+        // gets the corresponding block
+        Block sideBlock = iblockstate.getBlock();
+
+        // we render the side only if the next block is not another scaffholding block
+        return !Objects.equals(this, sideBlock);
     }
 }
