@@ -15,6 +15,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Objects;
+
 /**
  * {@see http://greyminecraftcoder.blogspot.fr/2013/07/rendering-transparent-blocks.html}
  */
@@ -64,12 +66,13 @@ public class BlockScaffolding extends Block implements ITchernocraftBlock{
 
     @SideOnly(Side.CLIENT)
     @Override
+    @SuppressWarnings("deprecation")
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
         // gets the neighboor blockstate following the given side
         IBlockState sideBlockState = blockAccess.getBlockState(pos.offset(side));
         // gets the corresponding block
-        Block sideBlock = iblockstate.getBlock();
+        Block sideBlock = sideBlockState.getBlock();
 
         // we render the side only if the next block is not another scaffholding block
         return !Objects.equals(this, sideBlock);
